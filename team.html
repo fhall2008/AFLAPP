@@ -43,6 +43,7 @@
             <!-- Add more years as needed -->
         </select>
         <button onclick="fetchGames()">Load Games</button>
+        <button onclick="fetchLiveGames()">Show Live Games</button>
     </div>
     <div class="game-list" id="game-list"></div>
 
@@ -51,6 +52,12 @@
             const teamId = localStorage.getItem('selectedTeamId');
             const year = document.getElementById('year').value;
             const response = await fetch(`https://api.squiggle.com.au/?q=games;year=${year};team=${teamId}`);
+            const data = await response.json();
+            displayGames(data.games);
+        }
+
+        async function fetchLiveGames() {
+            const response = await fetch('https://api.squiggle.com.au/?q=games;live=1');
             const data = await response.json();
             displayGames(data.games);
         }
