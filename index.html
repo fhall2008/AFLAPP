@@ -27,16 +27,30 @@
             padding: 15px;
             text-align: center;
             width: 200px;
+            cursor: pointer;
         }
         .team img {
             width: 100px;
             height: auto;
+        }
+        .year-select {
+            text-align: center;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
 
     <h1>AFL Teams</h1>
+    <div class="year-select">
+        <label for="year">Select Year: </label>
+        <select id="year">
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020</option>
+            <!-- Add more years as needed -->
+        </select>
+    </div>
     <div class="team-list" id="team-list"></div>
 
     <script>
@@ -51,6 +65,7 @@
             teams.forEach(team => {
                 const teamDiv = document.createElement('div');
                 teamDiv.classList.add('team');
+                teamDiv.onclick = () => viewTeam(team.id);
                 teamDiv.innerHTML = `
                     <img src="https://api.squiggle.com.au${team.logo}" alt="${team.name} logo">
                     <h2>${team.name} (${team.abbrev})</h2>
@@ -58,6 +73,13 @@
                 `;
                 teamList.appendChild(teamDiv);
             });
+        }
+
+        function viewTeam(teamId) {
+            const selectedYear = document.getElementById('year').value;
+            localStorage.setItem('selectedTeamId', teamId);
+            localStorage.setItem('selectedYear', selectedYear);
+            window.location.href = 'team.html';
         }
 
         fetchTeams();
