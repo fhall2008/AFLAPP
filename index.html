@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AFL Teams</title>
+    <title>AFLAPP</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,24 +33,11 @@
             width: 100px;
             height: auto;
         }
-        .year-select {
-            text-align: center;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
 
     <h1>AFL Teams</h1>
-    <div class="year-select">
-        <label for="year">Select Year: </label>
-        <select id="year">
-            <option value="2022">2022</option>
-            <option value="2021">2021</option>
-            <option value="2020">2020</option>
-            <!-- Add more years as needed -->
-        </select>
-    </div>
     <div class="team-list" id="team-list"></div>
 
     <script>
@@ -76,9 +63,7 @@
         }
 
         function viewTeam(teamId) {
-            const selectedYear = document.getElementById('year').value;
             localStorage.setItem('selectedTeamId', teamId);
-            localStorage.setItem('selectedYear', selectedYear);
             window.location.href = 'team.html';
         }
 
