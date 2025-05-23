@@ -40,7 +40,7 @@
         <label for="year">Select Year: </label>
         <select id="year">
             <script>
-                for (let year = 2020; year <= 2025; year++) {
+                for (let year = 1899; year <= 2025; year++) {
                     document.write(`<option value="${year}">${year}</option>`);
                 }
             </script>
@@ -68,6 +68,9 @@
         }
 
         function displayLadder(teams) {
+            // Sort teams by rank in ascending order
+            teams.sort((a, b) => a.rank - b.rank);
+
             const ladderBody = document.getElementById('ladder-body');
             ladderBody.innerHTML = ''; // Clear previous standings
             teams.forEach(team => {
