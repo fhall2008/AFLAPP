@@ -37,13 +37,11 @@
     <div class="select-container">
         <label for="year">Select Year: </label>
         <select id="year">
-            <option value="2019">2019</option>
-            <option value="2020">2020</option>
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-            <option value="2023">2023</option>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
+            <script>
+                for (let year = 2019; year <= 2025; year++) {
+                    document.write(`<option value="${year}">${year}</option>`);
+                }
+            </script>
         </select>
         <label for="round">Select Round: </label>
         <select id="round">
@@ -93,7 +91,7 @@
                 tipDiv.classList.add('tip');
                 tipDiv.innerHTML = `
                     <p><strong>${tip.hteam} vs ${tip.ateam}</strong></p>
-                    <p><strong>Tip:</strong> ${tip.tip}</p>
+                    <p><strong>Tip:</strong> ${tip.tip} (Model: ${tip.source})</p>
                     <p><strong>Venue:</strong> ${tip.venue}</p>
                     <p><strong>Date:</strong> ${tip.date}</p>
                     <p><strong>Confidence:</strong> ${tip.confidence}</p>
