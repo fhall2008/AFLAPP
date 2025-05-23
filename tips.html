@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFL Tips</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        .round-select {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .tip-list {
+            margin: 20px 0;
+        }
+        .tip {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px 0;
+            padding: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>AFL Tips for the Round</h1>
+    <div class="round-select">
+        <label for="round">Select Round: </label>
+        <select id="round">
+            <option value="1">Round 1</option>
+            <option value="2">Round 2</option>
+            <option value="3">Round 3</option>
+            <!-- Add more rounds as needed -->
+        </select>
+        <button onclick="fetchTips()">Load Tips</button>
+    </div>
+    <div class="tip-list" id="tip-list"></div>
+
+    <script>
+        async function fetchTips() {
+            const year = 2019; // Set the year as needed
+            const round = document.getElementById('round').value;
+            const response = await fetch(`https://api.squiggle.com.au/?q=tips;year=${year};round=${round};format=json`);
+            const data = await response.json();
+            displayTips(data.tips);
+        }
+
+        function displayTips(tips) {
+            const tipList = document.getElementById('tip-list');
+            tipList.innerHTML = ''; // Clear previous tips
+            tips.forEach(tip => {
+                const tipDiv = document.createElement('div');
+                tipDiv.classList.add('tip');
+                tipDiv.innerHTML = `
+                    <p><strong>${tip.hteam} vs ${tip.ateam}</strong></p>
+                    <p><strong>Tip:</strong> ${tip.tip}</p>
+                    <p><strong>Venue:</strong> ${tip.venue}</p>
+                    <p><strong>Date:</strong> ${tip.date}</p>
+                    <p><strong>Confidence:</strong> ${tip.confidence}</p>
+                `;
+                tipList.appendChild(tipDiv);
+            });
+        }
+    </script>
+
+</body>
+</html>
