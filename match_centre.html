@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Centre</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #0056b3;
+        }
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        .search-form label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .search-form input {
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .search-form button {
+            padding: 10px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-form button:hover {
+            background-color: #003d82;
+        }
+        #match-centre {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        #match-centre h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .match-details {
+            margin-bottom: 15px;
+        }
+        .team-names {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .score {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .event {
+            margin-bottom: 8px;
+            padding: 10px;
+            border-left: 5px solid #007bff;
+            background-color: #e9f5ff;
+            border-radius: 4px;
+        }
+        .event strong {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Match Centre</h1>
+        <div class="search-form">
+            <label for="leagueId">League ID:</label>
+            <input type="text" id="leagueId" name="leagueId" value="1">
+
+            <label for="levelId">Level ID:</label>
+            <input type="text" id="levelId" name="levelId" value="1">
+
+            <label for="seasonId">Season ID:</label>
+            <input type="text" id="seasonId" name="seasonId" value="1">
+
+            <button onclick="loadMatchCentre()">Load Match Centre</button>
+        </div>
+
+        <div id="match-centre">
+            <!-- Match details will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        function loadMatchCentre() {
+            const leagueId = document.getElementById('leagueId').value;
+            const levelId = document.getElementById('levelId').value;
+            const seasonId = document.getElementById('seasonId').value;
+
+            const apiUrl = `https://api.afl.championdata.com/leagues/${leagueId}/levels/${levelId}/seasons/${seasonId}/fixture`;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayMatchCentre(data);
+                })
+                .catch(error => {
+                    document.getElementById('match-centre').innerHTML = `<p>Error loading match centre: ${error.message}</p>`;
+                });
+        }
+
+        function displayMatchCentre(data) {
+            const matchCentreDiv = document.getElementById('match-centre');
+            matchCentreDiv.innerHTML = ''; // Clear previous content
+
+            if (!data || data.length === 0) {
+                matchCentreDiv.innerHTML = '<p>No match data available for the specified IDs.</p>';
+                return;
+            }
+
+            // Assuming the API returns an array of matches, let's display the first one
+            const match = data[0];
+
+            // Basic match details
+            let matchDetailsHTML = `
+                <h2>Match Details</h2>
+                <div class="match-details">
+                    <p class="team-names"><strong>${match.homeTeam}</strong> vs <strong>${match.awayTeam}</strong></p>
+                    <p><strong>Date:</strong> ${match.date}</p>
+                    <p><strong>Round:</strong> ${match.round}</p>
+                </div>
+            `;
+
+            // Example: Displaying some events (you'll need to adjust this based on the actual API response)
+            matchDetailsHTML += `<h2>Match Events</h2>`;
+            if (match.events && match.events.length > 0) {
+                match.events.forEach(event => {
+                    matchDetailsHTML += `
+                        <div class="event">
+                            <strong>Type:</strong> ${event.type}<br>
+                            <strong>Description:</strong> ${event.description}<br>
+                            <strong>Time:</strong> ${event.time}
+                        </div>
+                    `;
+                });
+            } else {
+                matchDetailsHTML += `<p>No events available for this match.</p>`;
+            }
+
+            matchCentreDiv.innerHTML = matchDetailsHTML;
+        }
+    </script>
+</body>
+</html>
